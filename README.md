@@ -1,6 +1,6 @@
-# Sqc — a minimalist, from-scratch compiler written in C
+# sqc — a minimalist, from-scratch compiler written in C
 
-Sqc compiles **C**, **C#** and **C++** straight to native machine code. It
+sqc compiles **C**, **C#** and **C++** straight to native machine code. It
 does not depend on an external assembler, linker or SDK. It ships its own
 lexer, preprocessor, parser, AST, code generators (x86-32, x86-64 and AArch64),
 assembler, object-file format and linker. It writes finished executables
