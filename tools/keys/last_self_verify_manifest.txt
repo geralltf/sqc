@@ -1,0 +1,14 @@
+sqc self-hosting verification manifest
+git_commit=b3c6912613ead43409d3722e6b746ad52476635e
+git_describe=b3c6912-dirty
+git_branch=main
+platform=Linux x86_64 kernel=7.0.0-31-generic
+bootstrap_cc=gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+timestamp=2026-09-23T08:48:41Z
+rounds_requested=4
+target_platform=linux
+gen0_sha256=f81760a576ffe9321df939c0bf2a71ec59e220c7deafcb953db4eca2ba9cc665
+gen0_battery=PASS
+gen1_sha256=1b2e89b8d1fa8b3a388c0066ab0cf5d305c3f2a2572a0789d423df1a4f060cc0
+gen1_battery=FAIL
+status=FAIL_AT_gen1_battery

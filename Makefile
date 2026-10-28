@@ -1,0 +1,34 @@
+CC=gcc
+CFLAGS=-I. -Wall -pedantic
+# sqc's own preprocessor/parser recurse once per nested #include (and
+# per nested expression/statement) -- the default 1MB Windows thread stack
+# is exhausted by deeply-nested real-world header trees (confirmed via a
+# real Windows SDK <windows.h> import attempt: STATUS_STACK_OVERFLOW inside
+# ___chkstk_ms, well before running out of memory). 16MB gives real headroom
+# without meaningfully affecting startup cost.
+LDFLAGS=
+DEPS =
+HEADERS =
+ANDROID_OBJ = android/android_sha256.o android/android_crc32.o android/android_zip.o android/android_axml.o android/android_manifest.o android/android_bignum.o android/android_der.o android/android_rsa.o android/android_rsa_keyfile.o android/android_x509.o android/android_apk_digest.o android/android_apk_sign.o android/android_base64.o android/android_apk_sign_v1.o android/android_pack.o android/android_sha1.o android/android_adler32.o android/android_dex.o
+OBJ = compiler.o assembler.o ast.o codegen.o arm64_asm.o codegen_arm64.o lexer.o parser_new4.o pe_builder.o elf_builder.o macho_builder.o symtable.o linker.o winlinker.o objfile.o implib.o diag.o CS/cs_ast.o CS/cs_lexer.o CS/cs_parser.o CS/cs_lower.o CPP/cpp_ast.o CPP/cpp_lexer.o CPP/cpp_parser.o CPP/cpp_lower.o $(ANDROID_OBJ)
+
+%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+all: $(OBJ)
+	$(CC) -o sqc $^ $(CFLAGS) $(LDFLAGS)
+
+# tools/self_verify.sh's own multi-generation self-hosting check doesn't
+# yet support actually RUNNING it against Windows-targeted output -- see
+# that script's own platform-mismatch messages for why (every generation
+# past the first has to execute the previous one to keep going, and this
+# project's own verification tooling was only ever built/tested on
+# Linux). Wired up here anyway so the target exists and reports that
+# honestly, rather than leaving `make -f Makefile verify` undefined.
+verify: all
+	SQC_VERIFY_PLATFORM=windows bash tools/self_verify.sh
+
+clean:
+	rm -rf *.o
+	rm -rf sqc.exe
+	rm -rf sqc
